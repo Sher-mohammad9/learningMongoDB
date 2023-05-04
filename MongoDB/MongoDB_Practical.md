@@ -19,7 +19,7 @@ use WecodeAcademy;
 db.createCollection("Collection_Name") MongoDB mein ek command hai jo ek nayi collection ko database mein create karne ke liye use kiya jata hai. Is command ke dwara aap kisi bhi database mein ek nayi collection bana sakte hain. Collection_Name ki jagah aap apne collection ka naam de sakte hain. Agar is naam se koi collection pehle se hi maujood hai toh yeh command us collection ko fir se create nahi karega. Yeh command ek JSON object mein ek khaali collection ko return karta hai.
 
 Syntax :
-```mongodb
+```mongo
 db.createCollection("Collection_Name");
 ```
 
@@ -35,7 +35,7 @@ db.createCollection("student");
 db.collection_name.insertOne() MongoDB mein ek command hai jo ek naye document ko collection mein insert karne ke liye use kiya jata hai. Yeh command ek hi document ko insert karta hai, aur usey JSON format mein accept karta hai. Jab yeh command execute hoti hai, toh ek unique identifier field, 'id' automatically document mein generate hoti hai.
 
 Syntax :
-```mongodb
+```mongo
 db.collection_name.insertOne({add_Data});
 ```
 
@@ -49,7 +49,7 @@ db.student.insertOne({"name" : "Sher mohammad", "mobile" : 9610406098, "email_ad
 db.collection_name.insertMany() MongoDB mein ek command hai jo ek naye document ko collection mein insert karne ke liye use kiya jata hai. Yeh command ek ya ek se jyada document ko insert karta hai, aur usey JSON format mein accept karta hai. Jab yeh command execute hoti hai, toh ek unique identifier field, 'id' automatically document mein generate hoti hai.
 
 Syntax :
-```mongodb
+```mongo
 db.collection_name.insertMany([{add_Data}]);
 ```
 
@@ -68,7 +68,7 @@ db.student.insertMany([{"name" : "Sher mohammad", "mobile" : 9610406098, "email_
 db.collection_Name.find() MongoDB mein ek command hai jo ek collection se ek ya ek se jyada documents ko get karne ke liye use hoti hai. Is command ka use ek collection mein ek ya adhik documents ko get karne ke liye kiya jata hai. Yeh command ek cursor ko return karta hai, jisme documents array me store hote hain. Ham is cursor ko hasNext() aur next() methods ka use karke documents ko access kar sakte hain. Yah command documents ko JSON format mein return karta hai.
 
 Syntax :
-```mongodb
+```mongo
 db.collection_Name.find();  
 ```
 
