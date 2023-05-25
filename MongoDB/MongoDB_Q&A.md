@@ -55,17 +55,6 @@ db.student.aggregate([{$sort : {"studentName" : -1}}]);
 ### 7. vo sare students ka naam btao jinki dob year same hai 
 
 ```sql
-db.student.aggregate(
-[
-  {
-  	$group : {_id:"$dob", 
-  	studentName:{
-  		$push: "$studentName"
-  	}
-  }
-  }
-]
-)
 ```
 
 ### 8. vo sare students ka naam btao jinka address jaipur, nagaur ya karauli ho 
@@ -107,5 +96,100 @@ db.student.find({"fathername" : {$nin : ["ahmed"]}}, {"studentName" : 1})
 ### 14. Vo sare students ka naam btao jinka mobile 945345435 ni hai
 
 ```sql
-db.student.find({"mobile" : {$nin : [945345435]}}, {"studentName" : 1})
+db.student.find({"mobile" : {$nin : [945345435]}}, {"studentName" : 1});
+```
+
+# Test 2
+
+### Q1. Create database wecodeacademy
+
+```sql
+use WecodeAcademy;
+```
+
+### Q2. create collection batches
+
+```sql
+db.createCollection("batches");
+```
+
+### Q3. add 5 documents in this way
+
+```sql 
+db.batches.insertMany([
+  {batchName : "Node.js", student : ["arif", "sher mohammad", "khalil"], duration : 5, fees: 5000, marks : [10,20,30,40,50]}
+  {batchName : "Design", student : ["arif", "khalil", "irfan", "adil"], duration : 5, fees: 12000, marks : [10,20,30]}, 
+  {batchName : "Java", student : ["arif", "khalil", "irfan"], duration : 5, fees: 13000, marks : [10,80,60]}, 
+  {batchName : "javaScript", student : ["arif", "khalil","adil"], duration : 5, fees: 5000, marks : [71,26,99,67]}, 
+  {batchName : "ComputerScience", student : ["khalil", "irfan", "adil"], duration : 5, fees: 1000, marks : [60,60,60]}])
+```
+
+### Q4. Vo sare batches ke naam btao jinke student ke marks 50% se kam hai
+ ```sql
+db.batches.find({marks : {$lt : 50}},{batchName : 1, _id : 0});
+ ```
+
+### Q5. marks array me se sirf vhi marks rkhne hain jo 60+= hain. baki sbko remove krdo
+
+```sql
+db.batches.updateMany({},{$pull : {marks : {$lt : 60}}});
+```
+
+### Q6. marks array me starting se 3rd index se 5 new marks add krne hai 
+
+```sql
+db.batches.updateMany({}, {$push : {marks : {$each : [10,20,30,40,50], $position: 3}}});
+```
+
+### Q7. Back/Last se 4th position se 5 new marks add krne hain.
+
+```sql
+db.batches.updateMany({}, {$push : {marks : {$each : [70,80,90,100,110], $position: -4}}});
+```
+
+### Q8. Students array ko ascending and marks Array ko desc order me sort krna hai 
+
+```sql
+db.batches.updateMany({}, {$push : {student : {$each : [], $sort : 1}, marks:{$each : [], $sort : -1}}});
+```
+
+### Q9. Marks array me sirf 10 numbers rkhne hain starting se baki sb remove kr dene hain
+
+```sql
+db.batches.updateMany({}, {$push : {marks : {$each : [], $slice : 10}}});
+```
+### Q10. Agar marks array me max number 99 hai to thik otherwise max number 99 krdo
+
+```sql
+db.batches.updateMany({}, {$max : {marks : 99}});
+```
+
+### Q11. fees field ko rename krke totalfees krdo 
+
+```sql
+db.batches.updateMany({}, {$rename : {"fees": "totalFee"}});
+```
+
+### Q12. duration ko 2 se multiply krdo 
+
+```sql
+db.batches.updateMany({}, {$mul : {duration : 2}});
+```
+
+### Q13. students array me se Irfan, Adil ka naam hai to remove krdo
+
+```sql
+db.batches.updateMany({}, {$pull : {student : {$in : ["irfan", "adil"]}}});
+```
+
+### Q14. Agar fees 10000 se jyada hai to duration field ko remove krdo
+
+```sql
+db.batches.updateMany({totalFee : {$gt : 10000}}, {$unset : {duration : ""}});
+```
+
+### Q15. Vo sare students search kro jinke naam me Khan hai aur batchName Designing hai aur fees 12000 se jyada hai aur students array ki size 10 ho.
+
+```sql
+db.batches.find({$and : [{student : {$in : ["khan"]}}, {batchName : "Design"}, {totalFee : {$gt : 12000}}, {student : {$size : 10}}]});
 ```
