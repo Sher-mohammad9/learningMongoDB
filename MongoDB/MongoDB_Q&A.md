@@ -45,11 +45,21 @@ db.student.aggregate([{$sort : {"studentName" : -1}}]);
 ### 5. vo sare students ki list return kro jinka admission last 3 months me hua hai 
 
 ```sql
+var currentDate = new Date();
+var last3Month = new Date();
+last3Month.setMonth(currentDate.getMonth() - 3)
+
+db.student.find({admissionDate : {$gte : last3Month, $lte : currentDate}})
 ```
 
 ### 6. vo sare students ka only naam btao jinka admission current month me hua hai 
 
 ```sql
+var currentDate = new Date();
+var stratMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+var endMonth = new Date(currentDate,getFullYear(), currentDate.getMonth() + 1, 0);
+
+db.student.find({admissionDate : {$gte : stratMonth, $lte : endMonth}}, {studentName : 1})
 ```
 
 ### 7. vo sare students ka naam btao jinki dob year same hai 
@@ -132,7 +142,7 @@ db.batches.find({marks : {$lt : 50}},{batchName : 1, _id : 0});
 ### Q5. marks array me se sirf vhi marks rkhne hain jo 60+= hain. baki sbko remove krdo
 
 ```sql
-db.batches.updateMany({},{$pull : {marks : {$lt : 60}}});
+db.batches.updateMany({},{$pullAll : {marks : {$lt : 60}}});
 ```
 
 ### Q6. marks array me starting se 3rd index se 5 new marks add krne hai 
@@ -161,7 +171,6 @@ db.batches.updateMany({}, {$push : {marks : {$each : [], $slice : 10}}});
 ### Q10. Agar marks array me max number 99 hai to thik otherwise max number 99 krdo
 
 ```sql
-db.batches.updateMany({}, {$max : {marks : 99}});
 ```
 
 ### Q11. fees field ko rename krke totalfees krdo 
@@ -179,7 +188,7 @@ db.batches.updateMany({}, {$mul : {duration : 2}});
 ### Q13. students array me se Irfan, Adil ka naam hai to remove krdo
 
 ```sql
-db.batches.updateMany({}, {$pull : {student : {$in : ["irfan", "adil"]}}});
+db.batches.updateMany({}, {$pullAll : {student : {$in : ["irfan", "adil"]}}});
 ```
 
 ### Q14. Agar fees 10000 se jyada hai to duration field ko remove krdo
@@ -191,5 +200,5 @@ db.batches.updateMany({totalFee : {$gt : 10000}}, {$unset : {duration : ""}});
 ### Q15. Vo sare students search kro jinke naam me Khan hai aur batchName Designing hai aur fees 12000 se jyada hai aur students array ki size 10 ho.
 
 ```sql
-db.batches.find({$and : [{student : {$in : ["khan"]}}, {batchName : "Design"}, {totalFee : {$gt : 12000}}, {student : {$size : 10}}]});
+db.batches.find({$and : [{student : {$regex : /khan/}}, {batchName : "Design"}, {totalFee : {$gt : 12000}}, {student : {$size : 10}}]});
 ```
